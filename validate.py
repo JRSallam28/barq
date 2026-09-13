@@ -123,21 +123,27 @@ def check_endpoint(path, expected_status=200):
 
 def check_instances():
     instances = set()
+    attempts = 0
+    deadline = time.monotonic() + 10
 
-    for _ in range(12):
+    while time.monotonic() < deadline:
+        attempts += 1
         status, body, _ = request("GET", "/instance")
 
-        if status != 200:
-            continue
+        if status == 200:
+            try:
+                payload = json.loads(body)
+                instance_id = payload.get("instance_id")
 
-        try:
-            payload = json.loads(body)
-            instance_id = payload.get("instance_id")
+                if instance_id:
+                    instances.add(instance_id)
+            except json.JSONDecodeError:
+                pass
 
-            if instance_id:
-                instances.add(instance_id)
-        except json.JSONDecodeError:
-            pass
+        if {"app-01", "app-02"}.issubset(instances):
+            break
+
+        time.sleep(0.5)
 
     expected = {"app-01", "app-02"}
     ok = expected.issubset(instances)
@@ -145,9 +151,8 @@ def check_instances():
     report(
         "both backend instances reachable",
         ok,
-        f"observed={sorted(instances)}",
+        f"observed={sorted(instances)} attempts={attempts}",
     )
-
 
 def check_records():
     title = f"BARQ validator {int(time.time())}"
@@ -313,9 +318,10 @@ def check_network_isolation():
         for container in containers.values():
             names.add(container.get("Name"))
 
-        expected = {"app-01", "app-02", "nginx", "postgres", "redis"}
+        expected = {"app-01", "app-02", "postgres", "redis"}
+        forbidden = {"nginx"}
 
-        ok = internal and expected.issubset(names)
+        ok = internal and expected.issubset(names) and names.isdisjoint(forbidden)
 
         report(
             "backend network isolation",
