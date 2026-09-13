@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 
 
-BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:8080")
+BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:8090")
 PROJECT = "barq-assessment"
 TIMEOUT = 3
 READY_WAIT = 30
@@ -140,12 +140,12 @@ def check_instances():
             except json.JSONDecodeError:
                 pass
 
-        if {"app-01", "app-02"}.issubset(instances):
+        if {"app-01", "app-02" , "app-03"}.issubset(instances):
             break
 
         time.sleep(0.5)
 
-    expected = {"app-01", "app-02"}
+    expected = {"app-01", "app-02", "app-03"}
     ok = expected.issubset(instances)
 
     report(
@@ -215,7 +215,7 @@ def check_counter():
 
 
 def check_container_health():
-    expected = ["app-01", "app-02", "nginx", "postgres", "redis"]
+    expected = ["app-01", "app-02", "app-03", "nginx", "postgres", "redis"]
 
     code, output, error = docker(
         "compose",
@@ -318,7 +318,7 @@ def check_network_isolation():
         for container in containers.values():
             names.add(container.get("Name"))
 
-        expected = {"app-01", "app-02", "postgres", "redis"}
+        expected = {"app-01", "app-02", "app-03", "postgres", "redis"}
         forbidden = {"nginx"}
 
         ok = internal and expected.issubset(names) and names.isdisjoint(forbidden)
