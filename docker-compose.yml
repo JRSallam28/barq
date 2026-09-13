@@ -102,6 +102,12 @@ services:
         condition: service_healthy
       app-02:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
     networks: [frontend]
 
 networks:
