@@ -44,11 +44,11 @@
 
 ## CI evidence
 
-- Earlier successful CI: `34743086333`
-- Post-video failed CI: `34780817420`
-  - Cause: CI still used public port `8080` while the final validator used `8090`.
-  - Fix documented in `troubleshooting.md`.
-- Final green CI: TODO_AFTER_FINAL_PUSH
+Final commit: f1c39fa
+Matching final CI run: 34801568373
+Continuous 12-18 minute video URL: <(https://drive.google.com/file/d/1Z7oHXBgChkhbAMPwwMoDLuDLF58HUoDE/view?usp=sharing)>
+Later documentation-only commit: f1c39fa
+Final green CI: 34801568373
 
 ## Consistency check
 
