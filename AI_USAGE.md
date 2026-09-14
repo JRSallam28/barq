@@ -68,3 +68,24 @@ AI assistance was used during this assessment. All suggested changes were review
   * `68d4856 feat: add PostgreSQL backup and restore scripts`
   * `a2bf83e ci: validate environment on push and pull request`
   * later documentation commits
+
+## Post-video finalization
+
+AI assistance was also used after the recorded assessment video to review the final repository state against the demonstrated runtime.
+
+This included:
+
+- identifying that the final GitHub Actions workflow still used public port `8080` while the demonstrated final state and validator used `8090`
+- updating CI readiness and runtime port configuration to match `8090`
+- checking that the final Compose configuration, `.env.example`, README and architecture documentation matched the three-instance final state
+- helping structure the final troubleshooting and evidence documentation
+
+These changes were verified independently by:
+
+- `docker compose -p barq-assessment config --quiet`
+- `curl http://127.0.0.1:8090/ready`
+- `BASE_URL=http://127.0.0.1:8090 ./validate.py`
+- confirming that validation observed `app-01`, `app-02` and `app-03`
+- inspecting the failed GitHub Actions run `34780817420` to identify the exact `8080` versus `8090` mismatch
+
+The final GitHub Actions result will be recorded after the corrected commit is pushed and CI completes.

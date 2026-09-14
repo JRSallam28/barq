@@ -213,3 +213,24 @@ This journal records the actual investigation, failed attempts, fixes, and retes
   - commit: `a2bf83eda168cd2151bd75036cb95f19785f039f`
 - Related commit: `a2bf83e ci: validate environment on push and pull request`
 - Remaining uncertainty: green CI proves the tested Compose environment passed these automated checks; it does not prove production scalability, security, monitoring, or high availability.
+
+## 14. Final CI failed after the live port change
+
+- Symptom: the post-video GitHub Actions run failed during `Validate environment`, while build, startup and readiness steps succeeded.
+- CI run: `34780817420`
+- Actual evidence:
+  - CI exported `PUBLIC_PORT=8080`
+  - NGINX was published as `127.0.0.1:8080->80/tcp`
+  - `validate.py` correctly tested the final URL `http://127.0.0.1:8090`
+  - all containers, including `app-03`, were healthy
+  - public HTTP validation failed with connection refused on port `8090`
+- Root cause: CI still used the pre-video public port after the required live change to `8090`.
+- Fix:
+  - changed CI `PUBLIC_PORT` from `8080` to `8090`
+  - changed the CI readiness URL from port `8080` to `8090`
+  - changed the Compose default public port and `.env.example` to `8090`
+- Local retest:
+  - `/ready` succeeded on port `8090`
+  - `validate.py` observed `app-01`, `app-02`, and `app-03`
+  - validation ended with `VALIDATION PASSED`
+- Remaining step: confirm the corrected final commit with a green GitHub Actions run.

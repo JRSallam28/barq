@@ -2,7 +2,7 @@ digraph BARQ {
   graph [
     rankdir=LR,
     labelloc="t",
-    label="BARQ DevOps Architecture (pre-video state)",
+    label="BARQ DevOps Architecture - Final State",
     fontsize=20,
     nodesep=0.6,
     ranksep=0.9
@@ -11,46 +11,44 @@ digraph BARQ {
   node [shape=box, style="rounded,filled", fillcolor=white];
   edge [fontsize=10];
 
-  client [label="Client / Host\nhttp://127.0.0.1:8080"];
+  client [label="Client / Host\nhttp://127.0.0.1:8090"];
 
   subgraph cluster_frontend {
     label="barq-assessment_frontend";
     style="rounded,dashed";
 
-    nginx [label="NGINX\ncontainer: nginx\nlisten: 80\nhost publish: 127.0.0.1:8080"];
+    nginx [label="NGINX\ncontainer: nginx\nlisten: 80\nhost: 127.0.0.1:8090"];
 
-    app01 [label="Flask app-01\ncontainer: app-01\n:8080\n/health = liveness\n/ready = DB + Redis"];
-    app02 [label="Flask app-02\ncontainer: app-02\n:8080\n/health = liveness\n/ready = DB + Redis"];
+    app01 [label="Flask app-01\n:8080\n/health + /ready"];
+    app02 [label="Flask app-02\n:8080\n/health + /ready"];
+    app03 [label="Flask app-03\n:8080\n/health + /ready"];
   }
 
   subgraph cluster_backend {
     label="barq-assessment_backend\ninternal: true";
     style="rounded,dashed";
 
-    postgres [label="PostgreSQL\ncontainer: postgres\n:5432\nhealth: pg_isready"];
-    redis [label="Redis\ncontainer: redis\n:6379\nhealth: redis-cli ping\nAOF enabled"];
+    postgres [label="PostgreSQL\n:5432\npersistent records"];
+    redis [label="Redis\n:6379\natomic counter + AOF"];
   }
 
   pgvol [shape=cylinder, label="postgres-data\nnamed volume"];
   redisvol [shape=cylinder, label="redis-data\nnamed volume"];
 
   client -> nginx [label="HTTP"];
-  nginx -> app01 [label="reverse proxy\nround-robin"];
-  nginx -> app02 [label="reverse proxy\nround-robin"];
+
+  nginx -> app01 [label="reverse proxy"];
+  nginx -> app02 [label="reverse proxy"];
+  nginx -> app03 [label="reverse proxy"];
 
   app01 -> postgres [label="DATABASE_URL"];
   app02 -> postgres [label="DATABASE_URL"];
+  app03 -> postgres [label="DATABASE_URL"];
+
   app01 -> redis [label="REDIS_URL"];
   app02 -> redis [label="REDIS_URL"];
+  app03 -> redis [label="REDIS_URL"];
 
   postgres -> pgvol [label="persistent data"];
   redis -> redisvol [label="persistent data"];
-
-  postgres -> app01 [style=dashed, label="healthy before start"];
-  redis -> app01 [style=dashed, label="healthy before start"];
-  postgres -> app02 [style=dashed, label="healthy before start"];
-  redis -> app02 [style=dashed, label="healthy before start"];
-
-  app01 -> nginx [style=dashed, label="healthy before NGINX start"];
-  app02 -> nginx [style=dashed, label="healthy before NGINX start"];
 }

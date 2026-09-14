@@ -21,7 +21,7 @@ jobs:
         run: |
           password="$(openssl rand -hex 24)"
           {
-            echo "PUBLIC_PORT=8080"
+            echo "PUBLIC_PORT=8090"
             echo "POSTGRES_PASSWORD=$password"
             echo "DATABASE_URL=postgresql://barq_app:$password@postgres:5432/barq_tasks"
             echo "REDIS_URL=redis://redis:6379/0"
@@ -43,7 +43,7 @@ jobs:
         shell: bash
         run: |
           for attempt in $(seq 1 30); do
-            if curl --fail --silent http://127.0.0.1:8080/ready >/dev/null; then
+            if curl --fail --silent http://127.0.0.1:8090/ready >/dev/null; then
               echo "Application ready after attempt $attempt."
               exit 0
             fi
