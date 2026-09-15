@@ -5,11 +5,12 @@
 - Repository URL: https://github.com/JRSallam28/barq
 - Starting video commit: `3fa8caf3f5d6abcde3fb0db37c432b6b40dad213`
 - Video implementation commit: `79719af`
-- Final commit: TODO_AFTER_FINAL_DOCS_COMMIT
-- Matching final CI run: TODO_AFTER_FINAL_GREEN_CI
-- Continuous 12-18 minute video URL: TODO_ADD_VIDEO_URL
+- Final implementation/documentation commit: `f1c39fa`
+- Matching implementation CI run: `34801568373`
+- Continuous 12-18 minute video URL: https://drive.google.com/file/d/1Z7oHXBgChkhbAMPwwMoDLuDLF58HUoDE/view?usp=sharing
 - Challenge receipt ID: `64797be527da43368122cb96e4216fed`
-- Later documentation-only commit: TODO_AFTER_FINAL_DOCS_COMMIT
+- Evidence-only metadata commit: repository HEAD on `main`
+- Latest verified green CI before final evidence edit: `34803519400`
 
 ## Final demonstrated state
 
@@ -23,19 +24,19 @@
 
 | Requirement | File / Evidence | Video timestamp |
 |---|---|---|
-| Starting repository state | `git status`, starting commit above | TODO |
-| Build and startup | `docker-compose.yml`, video terminal output | TODO |
-| Required endpoints | `app/`, `validate.py` | TODO |
-| Multiple backends | `/instance`, `app-01`, `app-02`, `app-03` | TODO |
-| Failure and recovery | `failure_test.py` | TODO |
-| PostgreSQL persistence | `/records`, named volume, `backup.sh`, `restore.sh` | TODO |
-| Redis shared counter | `/counter`, Redis AOF volume | TODO |
-| Historical log finding | `log_analysis.md` | TODO |
-| Runtime challenge | `.assessment/challenge.json` | TODO |
-| Live port change | final public port `8090` | TODO |
-| Live app-03 addition | `docker-compose.yml`, `nginx/nginx.conf` | TODO |
-| Final validation | `validate.py` -> `VALIDATION PASSED` | TODO |
-| Commit and push | video implementation commit `79719af` | TODO |
+| Starting repository state | `git status`, starting commit above | See continuous video |
+| Build and startup | `docker-compose.yml`, video terminal output | See continuous video |
+| Required endpoints | `app/`, `validate.py` | See continuous video |
+| Multiple backends | `/instance`, `app-01`, `app-02`, `app-03` | See continuous video |
+| Failure and recovery | `failure_test.py` | See continuous video |
+| PostgreSQL persistence | `/records`, named volume, `backup.sh`, `restore.sh` | See continuous video |
+| Redis shared counter | `/counter`, Redis AOF volume | See continuous video |
+| Historical log finding | `log_analysis.md` | See continuous video |
+| Runtime challenge | `.assessment/challenge.json` | See continuous video |
+| Live port change | final public port `8090` | See continuous video |
+| Live app-03 addition | `docker-compose.yml`, `nginx/nginx.conf` | See continuous video |
+| Final validation | `validate.py` -> `VALIDATION PASSED` | See continuous video |
+| Commit and push | video implementation commit `79719af` | See continuous video |
 | Final architecture | `architecture.dot`, `architecture.png` | N/A |
 | Troubleshooting journal | `troubleshooting.md` | N/A |
 | Security review | `security_review.md` | N/A |
